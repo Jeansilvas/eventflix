@@ -1,14 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EventFlix</title>
+  <link rel="stylesheet" href="css/home.css">
 </head>
 <body>
-    <h1>Hello</h1>
-    <p>World</p>
-    <button id="logoutBtn">Sair</button>
-<script type="module" src="js/auth.js"></script>
+
+  <aside class="sidebar">
+    <div>
+      <div class="logo">EventFlix</div>
+
+      <div class="profile-card" onclick="abrirModal('profileModal')">
+        <img id="profileImage" src="" alt="Foto">
+        <h2 id="profileNameView"></h2>
+        <p id="profileEmailView"></p>
+        <p id="profileJobView"></p>
+      </div>
+
+      <div class="menu">
+        <button class="active" onclick="mostrarSecao('dashboard')">🏠 Dashboard</button>
+        <button onclick="mostrarSecao('meusEventos')">🎟️ Meus Eventos</button>
+        <button onclick="mostrarSecao('participacoes')">📅 Participações</button>
+        <button onclick="mostrarSecao('destaques')">⭐ Destaques</button>
+        <button onclick="mostrarSecao('configuracoes')">⚙️ Configurações</button>
+        <button class="logout-btn" id="logoutBtn">🚪 Encerrar Sessão</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <div class="topbar">
+      <h1 id="pageTitle">Dashboard</h1>
+
+      <div class="top-actions">
+        <input type="text" class="search-input" id="searchInput" placeholder="Buscar por nome ou cidade">
+        <button class="btn" onclick="abrirModal('eventModal')">+ Criar Evento</button>
+      </div>
+    </div>
+
+    <section class="hero">
+      <h2>Gerencie seus eventos com estilo 🚀</h2>
+      <p>Crie eventos, confirme presenças e acompanhe tudo em tempo real.</p>
+    </section>
+
+    <div id="content"></div>
+
+  </main>
+
+  <div class="modal" id="profileModal">
+    <div class="modal-content">
+      <h2>Editar Perfil</h2>
+
+      <input type="text" id="profileName" placeholder="Nome">
+      <input type="email" id="profileEmail" placeholder="Email">
+      <input type="text" id="profileJob" placeholder="Profissão">
+      <input type="file" id="profilePhoto">
+
+      <div class="modal-actions">
+        <button class="btn cancel-btn" onclick="fecharModal('profileModal')">Cancelar</button>
+        <button class="btn" id="saveProfileBtn">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="eventModal">
+    <div class="modal-content">
+      <h2>Criar Evento</h2>
+
+      <input type="text" id="eventTitle" placeholder="Nome do evento">
+      <input type="text" id="eventCity" placeholder="Cidade">
+      <input type="date" id="eventDate">
+      <input type="time" id="eventTime">
+      <input type="number" id="eventVacancies" placeholder="Quantidade de vagas">
+
+      <select id="eventType">
+        <option value="Online">Online</option>
+        <option value="Presencial">Presencial</option>
+      </select>
+
+      <div class="modal-actions">
+        <button class="btn cancel-btn" onclick="fecharModal('eventModal')">Cancelar</button>
+        <button class="btn" id="saveEventBtn">Salvar Evento</button>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="js/home.js"></script>
 </body>
 </html>
+```

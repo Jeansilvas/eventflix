@@ -38,6 +38,8 @@ form.addEventListener("submit", async (e) => {
         nome,
         idade,
         email,
+        profissao: "",
+        foto: "",
         criadoEm: new Date()
       }
     );
