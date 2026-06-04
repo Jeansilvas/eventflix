@@ -55,45 +55,6 @@ async function carregarPerfil(uid) {
     dados.profissao || "";
 }
 
-window.participarEvento = async (eventoId) => {
-
-  const evento = eventos.find(
-    e => e.id === eventoId
-  );
-
-  if (!evento) return;
-
-  const participantes =
-    evento.participantes || [];
-
-  if (
-    participantes.includes(usuarioAtual.uid)
-  ) {
-    alert("Você já participa deste evento.");
-    return;
-  }
-
-  if (evento.vagasDisponiveis <= 0) {
-    alert("Não há vagas disponíveis.");
-    return;
-  }
-
-  participantes.push(usuarioAtual.uid);
-
-  await updateDoc(
-    doc(db, "eventos", eventoId),
-    {
-      participantes,
-      vagasDisponiveis:
-        evento.vagasDisponiveis - 1
-    }
-  );
-
-  await carregarEventos();
-
-  alert("Participação confirmada!");
-};
-
 document
   .getElementById("saveProfileBtn")
   .addEventListener("click", async () => {
@@ -221,9 +182,7 @@ async function carregarEventos() {
 }
 
 function gerarEventos(lista) {
-  const participa =
-  (evento.participantes || [])
-  .includes(usuarioAtual?.uid);
+  
 
   if (lista.length === 0) {
 
@@ -234,6 +193,10 @@ function gerarEventos(lista) {
     `;
   }
 
+  const participa =
+  (evento.participantes || [])
+  .includes(usuarioAtual?.uid);
+  
   return `
     <div class="events-grid">
       ${lista.map(evento => `
@@ -252,15 +215,13 @@ function gerarEventos(lista) {
               👥 ${evento.vagasDisponiveis} vagas
             </div>
             <div class="event-actions">
-
-              <button
-                class="join-btn"
-                onclick="participarEvento('${evento.id}')"
-                ${participa ? "disabled" : ""}
-              >
-                ${participa ? "Participando" : "Participar"}
-              </button>
-
+            <button
+              class="join-btn"
+              onclick="participarEvento('${evento.id}')"
+              ${participa ? "disabled" : ""}
+            >
+              ${participa ? "Participando" : "Participar"}
+            </button>
             </div>
 
           </div>
@@ -270,6 +231,45 @@ function gerarEventos(lista) {
     </div>
   `;
 }
+
+window.participarEvento = async (eventoId) => {
+
+  const evento = eventos.find(
+    e => e.id === eventoId
+  );
+
+  if (!evento) return;
+
+  const participantes =
+    evento.participantes || [];
+
+  if (
+    participantes.includes(usuarioAtual.uid)
+  ) {
+    alert("Você já participa deste evento.");
+    return;
+  }
+
+  if (evento.vagasDisponiveis <= 0) {
+    alert("Não há vagas disponíveis.");
+    return;
+  }
+
+  participantes.push(usuarioAtual.uid);
+
+  await updateDoc(
+    doc(db, "eventos", eventoId),
+    {
+      participantes,
+      vagasDisponiveis:
+        evento.vagasDisponiveis - 1
+    }
+  );
+
+  await carregarEventos();
+
+  alert("Participação confirmada!");
+};
 
 function mostrarDashboard() {
 
