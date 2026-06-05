@@ -206,7 +206,6 @@ function gerarEventos(lista) {
               ⏰ ${evento.hora}<br>
               👥 ${evento.vagasDisponiveis} vagas
             </div>
-            <div><button onclick="alert('Clicou!')">Participar</button></div>
           </div>
           
 
