@@ -205,9 +205,11 @@ function gerarEventos(lista) {
               📅 ${evento.data}<br>
               ⏰ ${evento.hora}<br>
               👥 ${evento.vagasDisponiveis} vagas
+              <button onclick="alert('Clicou!')">Clique aqui</button>
             </div>
-            <button onclick="alert('Clicou!')">Clique aqui</button>
+            
           </div>
+          
 
         </div>
       `).join("")}
