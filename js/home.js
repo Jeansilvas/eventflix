@@ -181,9 +181,6 @@ async function carregarEventos() {
 
 function gerarEventos(lista) {
 
-  const participa =
-  (evento.participantes || [])
-  .includes(usuarioAtual?.uid);
 
   if (lista.length === 0) {
 
@@ -196,7 +193,10 @@ function gerarEventos(lista) {
 
   return `
     <div class="events-grid">
-      ${lista.map(evento => `
+      ${lista.map(evento => {
+        const participa =
+          (evento.participantes || [])
+          .includes(usuarioAtual?.uid);
         <div class="event-card">
 
           <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200&auto=format&fit=crop">
