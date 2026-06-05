@@ -146,7 +146,6 @@ document
         vagasDisponiveis: vagas,
         tipo,
         criador: usuarioAtual.uid,
-        participantes: [],
         criadoEm: new Date()
       }
     );
@@ -180,6 +179,7 @@ async function carregarEventos() {
 }
 
 function gerarEventos(lista) {
+
   if (lista.length === 0) {
 
     return `
@@ -207,19 +207,8 @@ function gerarEventos(lista) {
               👥 ${evento.vagasDisponiveis} vagas
             </div>
 
-            <div class="event-actions">
-
-              <button
-                class="join-btn"
-                onclick="participarEvento('${evento.id}')"
-                ${participa ? "disabled" : ""}
-              >
-                ${participa ? "Participando" : "Participar"}
-              </button>
-
-            </div>
-
           </div>
+
         </div>
       `).join("")}
     </div>
@@ -263,24 +252,6 @@ window.mostrarSecao = (secao) => {
 
     return;
   }
-
-  if (secao === "participacoes") {
-
-    const participacoes = eventos.filter(
-      evento =>
-        (evento.participantes || [])
-        .includes(usuarioAtual.uid)
-    );
-
-    document.getElementById("pageTitle").textContent =
-      "Participações";
-
-    document.getElementById("content").innerHTML =
-      gerarEventos(participacoes);
-
-    return;
-  }
-
 };
 
 onAuthStateChanged(auth, async (user) => {
@@ -298,42 +269,3 @@ onAuthStateChanged(auth, async (user) => {
 
   await carregarEventos();
 });
-
-window.participarEvento = async (eventoId) => {
-
-  const evento = eventos.find(
-    e => e.id === eventoId
-  );
-
-  if (!evento) return;
-
-  const participantes =
-    evento.participantes || [];
-
-  if (
-    participantes.includes(usuarioAtual.uid)
-  ) {
-    alert("Você já participa deste evento.");
-    return;
-  }
-
-  if (evento.vagasDisponiveis <= 0) {
-    alert("Não há vagas disponíveis.");
-    return;
-  }
-
-  participantes.push(usuarioAtual.uid);
-
-  await updateDoc(
-    doc(db, "eventos", eventoId),
-    {
-      participantes,
-      vagasDisponiveis:
-        evento.vagasDisponiveis - 1
-    }
-  );
-
-  await carregarEventos();
-
-  alert("Participação confirmada!");
-};   
