@@ -191,37 +191,40 @@ function gerarEventos(lista) {
 
   return `
     <div class="events-grid">
-      ${lista.map(evento => `
-        <div class="event-card">
-
-          <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200&auto=format&fit=crop">
-
-          <div class="event-content">
-
-            <h3>${evento.titulo}</h3>
-
-            <div class="event-info">
-              📍 ${evento.cidade}<br>
-              📅 ${evento.data}<br>
-              ⏰ ${evento.hora}<br>
-              👥 ${evento.vagasDisponiveis} vagas
+      ${lista.map(evento => {
+        const participa = (evento.participantes || []).includes(usuarioAtual?.uid);
+        return `
+          <div class="event-card">
+  
+            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200&auto=format&fit=crop">
+  
+            <div class="event-content">
+  
+              <h3>${evento.titulo}</h3>
+  
+              <div class="event-info">
+                📍 ${evento.cidade}<br>
+                📅 ${evento.data}<br>
+                ⏰ ${evento.hora}<br>
+                👥 ${evento.vagasDisponiveis} vagas
+              </div>
+  
+              <div class="event-actions">
+  
+                <button
+                  class="join-btn"
+                  onclick="participarEvento('${evento.id}')"
+                  ${participa ? "disabled" : ""}
+                >
+                  ${participa ? "Participando" : "Participar"}
+                </button>
+  
+              </div>
+  
             </div>
-
-            <div class="event-actions">
-
-              <button
-                class="join-btn"
-                onclick="participarEvento('${evento.id}')"
-                ${participa ? "disabled" : ""}
-              >
-                ${participa ? "Participando" : "Participar"}
-              </button>
-
-            </div>
-
           </div>
-        </div>
-      `).join("")}
+        `;
+      }).join("")}
     </div>
   `;
 }
