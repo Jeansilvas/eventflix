@@ -1,5 +1,7 @@
 import { auth, db } from "./firebase.js";
 
+console.log("HOME.JS VERSÃO NOVA");
+
 import {
   onAuthStateChanged,
   signOut
