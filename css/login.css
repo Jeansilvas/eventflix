@@ -1,7 +1,7 @@
  
         body {
             font-family: Arial, sans-serif;
-            background-image: url("static/fundo.png");
+            background-color: #007bffd8;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
