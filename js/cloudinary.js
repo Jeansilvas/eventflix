@@ -10,7 +10,7 @@ export async function uploadImagem(file) {
   );
 
   const response = await fetch(
-    "https://api.cloudinary.com/v1_1/eventflix_uploads/image/upload",
+    "https://api.cloudinary.com/v1_1/dukg0h6da/image/upload",
     {
       method: "POST",
       body: formData

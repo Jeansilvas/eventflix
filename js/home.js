@@ -77,7 +77,7 @@ document
     const foto =
       document.getElementById("profilePhoto").files[0];
 
-let fotoURL = "";
+let fotoURL = null;
 
 if (foto) {
 
@@ -91,9 +91,17 @@ if (foto) {
       {
         nome,
         email,
-        profissao,
-        fotoURL
+        profissao
       }
+    );
+
+    if (fotoURL) {
+      dadosAtualizacao.fotoURL = fotoURL;
+    }
+
+    await updateDoc(
+      doc(db, "usuarios", usuarioAtual.uid),
+      dadosAtualizacao
     );
 
     document.getElementById("profileNameView").textContent =
