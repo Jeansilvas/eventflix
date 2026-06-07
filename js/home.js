@@ -1,4 +1,5 @@
 import { auth, db } from "./firebase.js";
+import { uploadImagem } from "./cloudinary.js";
 
 console.log("HOME.JS VERSÃO NOVA");
 
@@ -36,6 +37,8 @@ async function carregarPerfil(uid) {
 
   if (!docSnap.exists()) return;
 
+  if (dados.fotoURL) {document.getElementById("profileImage").src = dados.fotoURL;}
+
   const dados = docSnap.data();
 
   document.getElementById("profileNameView").textContent =
@@ -72,12 +75,25 @@ document
     const profissao =
       document.getElementById("profileJob").value;
 
+    const foto =
+      document.getElementById("profilePhoto").files[0];
+
+let fotoURL = "";
+
+if (foto) {
+
+  fotoURL =
+    await uploadImagem(foto);
+
+}
+
     await updateDoc(
       doc(db, "usuarios", usuarioAtual.uid),
       {
         nome,
         email,
-        profissao
+        profissao,
+        fotoURL
       }
     );
 
@@ -133,6 +149,12 @@ document
     const descricao =
       document.getElementById("eventDescription").value;
 
+    const fotoEvento = 
+      document.getElementById("eventPhoto").files[0];
+    let capaURL = "";
+
+    if (fotoEvento) {capaURL = await uploadImagem(fotoEvento);}
+
     if (!titulo || !cidade || !data) {
 
       alert("Preencha os campos obrigatórios");
@@ -151,6 +173,7 @@ document
         vagas,
         vagasDisponiveis: vagas,
         tipo,
+        capaURL,  
         criador: usuarioAtual.uid,
         participantes: [],
         criadoEm: new Date()
@@ -277,7 +300,10 @@ function gerarEventos(lista) {
             onclick="abrirDetalhesEvento('${evento.id}')"
           >
 
-            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200&auto=format&fit=crop">
+            <img src="${ evento.capaURL ||
+                'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200&auto=format&fit=crop'
+              }"
+            >
 
             <div class="event-content">
 
