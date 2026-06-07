@@ -77,25 +77,17 @@ document
     const foto =
       document.getElementById("profilePhoto").files[0];
 
-let fotoURL = null;
+    const dadosAtualizacao = {
+      nome,
+      email,
+      profissao
+    };
 
-if (foto) {
+    if (foto) {
 
-  fotoURL =
-    await uploadImagem(foto);
+      const fotoURL =
+        await uploadImagem(foto);
 
-}
-
-    await updateDoc(
-      doc(db, "usuarios", usuarioAtual.uid),
-      {
-        nome,
-        email,
-        profissao
-      }
-    );
-
-    if (fotoURL) {
       dadosAtualizacao.fotoURL = fotoURL;
     }
 
@@ -113,11 +105,17 @@ if (foto) {
     document.getElementById("profileJobView").textContent =
       profissao;
 
+    if (dadosAtualizacao.fotoURL) {
+
+      document.getElementById("profileImage").src =
+        dadosAtualizacao.fotoURL;
+    }
+
     fecharModal("profileModal");
 
     alert("Perfil atualizado!");
   });
-
+  
 document
   .getElementById("logoutBtn")
   .addEventListener("click", async () => {
