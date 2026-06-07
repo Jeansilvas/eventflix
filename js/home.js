@@ -220,6 +220,35 @@ window.participarEvento = async (eventoId) => {
   alert("Participação confirmada!");
 };
 
+window.cancelarParticipacao = async (eventoId) => {
+
+  const evento = eventos.find(
+    e => e.id === eventoId
+  );
+
+  if (!evento) return;
+
+  const participantes =
+    evento.participantes || [];
+
+  const novaLista = participantes.filter(
+    uid => uid !== usuarioAtual.uid
+  );
+
+  await updateDoc(
+    doc(db, "eventos", eventoId),
+    {
+      participantes: novaLista,
+      vagasDisponiveis:
+        evento.vagasDisponiveis + 1
+    }
+  );
+
+  await carregarEventos();
+
+  alert("Inscrição cancelada!");
+};
+
 function gerarEventos(lista) {
 
   if (lista.length === 0) {
@@ -256,13 +285,21 @@ function gerarEventos(lista) {
 
               <div class="event-actions">
 
-                <button
-                  class="join-btn"
-                  onclick="participarEvento('${evento.id}')"
-                  ${participa ? "disabled" : ""}
-                >
-                  ${participa ? "Participando" : "Participar"}
-                </button>
+                ${participa ? `
+                  <button
+                    class="confirm-btn"
+                    onclick="cancelarParticipacao('${evento.id}')"
+                  >
+                    Cancelar inscrição
+                  </button>
+                ` : `
+                  <button
+                    class="join-btn"
+                    onclick="participarEvento('${evento.id}')"
+                  >
+                    Participar
+                  </button>
+                `}
 
               </div>
 
