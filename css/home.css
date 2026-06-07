@@ -276,3 +276,23 @@
         width: 100%;
       }
     }
+
+    .event-details-modal {
+      animation: zoomIn .25s ease;
+    }
+
+    .event-card:hover {
+      transform: translateY(-4px);
+    }
+
+    @keyframes zoomIn {
+      from {
+        transform: scale(.8);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
