@@ -151,7 +151,7 @@ document
 
     const fotoEvento = 
       document.getElementById("eventPhoto").files[0];
-    let capaURL = "";
+      let capaURL = "";
 
     if (fotoEvento) {capaURL = await uploadImagem(fotoEvento);}
 
