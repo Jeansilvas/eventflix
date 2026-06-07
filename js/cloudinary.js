@@ -19,5 +19,15 @@ export async function uploadImagem(file) {
 
   const data = await response.json();
 
+  console.log("Eventflix: ", data);
+
+  if (!response.ok) {
+    throw new Error(
+        data.error?.message || "Erro ao enviar arquivo!"
+    );
+
+    return data.secure_url;
+  }
+
   return data.secure_url;
 }
