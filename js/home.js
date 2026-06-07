@@ -130,6 +130,9 @@ document
     const tipo =
       document.getElementById("eventType").value;
 
+    const descricao =
+      document.getElementById("eventDescription").value;
+
     if (!titulo || !cidade || !data) {
 
       alert("Preencha os campos obrigatórios");
@@ -142,6 +145,7 @@ document
       {
         titulo,
         cidade,
+        descricao,
         data,
         hora,
         vagas,
@@ -268,7 +272,10 @@ function gerarEventos(lista) {
           .includes(usuarioAtual?.uid);
 
         return `
-          <div class="event-card">
+          <div
+            class="event-card"
+            onclick="abrirDetalhesEvento('${evento.id}')"
+          >
 
             <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200&auto=format&fit=crop">
 
@@ -383,3 +390,32 @@ onAuthStateChanged(auth, async (user) => {
 
   await carregarEventos();
 });
+
+window.abrirDetalhesEvento = (eventoId) => {
+
+  const evento = eventos.find(
+    e => e.id === eventoId
+  );
+
+  if (!evento) return;
+
+  document.getElementById("detailTitle").textContent =
+    evento.titulo;
+
+  document.getElementById("detailInfo").innerHTML = `
+    <p><strong>Cidade:</strong> ${evento.cidade}</p>
+    <p><strong>Data:</strong> ${evento.data}</p>
+    <p><strong>Hora:</strong> ${evento.hora}</p>
+    <p><strong>Vagas:</strong> ${evento.vagasDisponiveis}</p>
+
+    <br>
+
+    <h3>Descrição</h3>
+
+    <p>
+      ${evento.descricao || "Sem descrição."}
+    </p>
+  `;
+
+  abrirModal("eventDetailsModal");
+};

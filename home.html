@@ -75,6 +75,7 @@
       <input type="date" id="eventDate">
       <input type="time" id="eventTime">
       <input type="number" id="eventVacancies" placeholder="Quantidade de vagas">
+      <textarea id="eventDescription" placeholder="Descreva seu evento..."></textarea>
 
       <select id="eventType">
         <option value="Online">Online</option>
@@ -87,6 +88,24 @@
       </div>
     </div>
   </div>
+  <div class="modal" id="eventDetailsModal">
+  <div class="modal-content">
+
+    <h2 id="detailTitle"></h2>
+
+    <div id="detailInfo"></div>
+
+    <br>
+
+    <button
+      class="btn"
+      onclick="fecharModal('eventDetailsModal')"
+    >
+      Fechar
+    </button>
+
+  </div>
+</div>
   <script type="module" src="js/home.js"></script>
 </body>
 </html>
