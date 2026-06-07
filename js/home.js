@@ -12,6 +12,7 @@ import {
   doc,
   getDoc,
   updateDoc,
+  deleteDoc,
   collection,
   addDoc,
   getDocs,
@@ -115,7 +116,7 @@ document
 
     alert("Perfil atualizado!");
   });
-  
+
 document
   .getElementById("logoutBtn")
   .addEventListener("click", async () => {
@@ -167,23 +168,43 @@ document
       return;
     }
 
-    await addDoc(
-      collection(db, "eventos"),
-      {
-        titulo,
-        cidade,
-        descricao,
-        data,
-        hora,
-        vagas,
-        vagasDisponiveis: vagas,
-        tipo,
-        capaURL,  
-        criador: usuarioAtual.uid,
-        participantes: [],
-        criadoEm: new Date()
-      }
-    );
+    if (eventoEditando) {
+
+      await updateDoc(
+        doc(db, "eventos", eventoEditando),
+        {
+          titulo,
+          cidade,
+          descricao,
+          data,
+          hora,
+          vagas,
+          tipo
+        }
+      );
+
+      eventoEditando = null;
+
+    } else {
+
+      await addDoc(
+        collection(db, "eventos"),
+        {
+          titulo,
+          cidade,
+          descricao,
+          data,
+          hora,
+          vagas,
+          vagasDisponiveis: vagas,
+          tipo,
+          capaURL,
+          criador: usuarioAtual.uid,
+          participantes: [],
+          criadoEm: new Date()
+        }
+      );
+    }
 
     fecharModal("eventModal");
 
@@ -281,7 +302,74 @@ window.cancelarParticipacao = async (eventoId) => {
   alert("Inscrição cancelada!");
 };
 
+window.excluirEvento = async (eventoId) => {
+
+  const confirmar = confirm(
+    "Deseja realmente excluir este evento?"
+  );
+
+  if (!confirmar) return;
+
+  await deleteDoc(
+    doc(db, "eventos", eventoId)
+  );
+
+  await carregarEventos();
+
+  alert("Evento excluído!");
+};
+
+window.editarEvento = (eventoId) => {
+
+  const evento = eventos.find(
+    e => e.id === eventoId
+  );
+
+  if (!evento) return;
+
+  eventoEditando = eventoId;
+
+  document.getElementById("eventTitle").value =
+    evento.titulo;
+
+  document.getElementById("eventCity").value =
+    evento.cidade;
+
+  document.getElementById("eventDate").value =
+    evento.data;
+
+  document.getElementById("eventTime").value =
+    evento.hora;
+
+  document.getElementById("eventVacancies").value =
+    evento.vagas;
+
+  document.getElementById("eventType").value =
+    evento.tipo;
+
+  document.getElementById("eventDescription").value =
+    evento.descricao || "";
+
+  abrirModal("eventModal");
+};
+
+window.abrirCriacaoEvento = () => {
+
+  eventoEditando = null;
+
+  document.getElementById("eventTitle").value = "";
+  document.getElementById("eventCity").value = "";
+  document.getElementById("eventDate").value = "";
+  document.getElementById("eventTime").value = "";
+  document.getElementById("eventVacancies").value = "";
+  document.getElementById("eventDescription").value = "";
+
+  abrirModal("eventModal");
+};
+
 function gerarEventos(lista) {
+  const ehCriador =
+  evento.criador === usuarioAtual?.uid;
 
   if (lista.length === 0) {
     return `
@@ -338,6 +426,26 @@ function gerarEventos(lista) {
                     Participar
                   </button>
                 `}
+
+                ${ehCriador ? `
+                  <button
+                    class="confirm-btn"
+                    onclick="event.stopPropagation(); excluirEvento('${evento.id}')"
+                  >
+                    Excluir
+                  </button>
+                ` : ""
+                }
+
+                ${ehCriador ? `
+                  <button
+                    class="join-btn"
+                    onclick="event.stopPropagation(); editarEvento('${evento.id}')"
+                  >
+                    Editar
+                  </button>
+                ` : ""
+                }
 
               </div>
 
