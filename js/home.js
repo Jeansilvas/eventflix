@@ -34,12 +34,11 @@ async function carregarPerfil(uid) {
 
   const docRef = doc(db, "usuarios", uid);
   const docSnap = await getDoc(docRef);
+  const dados = docSnap.data();
 
   if (!docSnap.exists()) return;
 
   if (dados.fotoURL) {document.getElementById("profileImage").src = dados.fotoURL;}
-
-  const dados = docSnap.data();
 
   document.getElementById("profileNameView").textContent =
     dados.nome || "";
