@@ -22,6 +22,7 @@ import {
 
 let usuarioAtual = null;
 let eventos = [];
+let eventoEditando = null
 
 window.abrirModal = (id) => {
   document.getElementById(id).style.display = "flex";
@@ -368,8 +369,7 @@ window.abrirCriacaoEvento = () => {
 };
 
 function gerarEventos(lista) {
-  const ehCriador =
-  evento.criador === usuarioAtual?.uid;
+  
 
   if (lista.length === 0) {
     return `
@@ -386,6 +386,8 @@ function gerarEventos(lista) {
         const participa =
           (evento.participantes || [])
           .includes(usuarioAtual?.uid);
+        
+        const ehCriador = evento.criador === usuarioAtual?.uid;
 
         return `
           <div
